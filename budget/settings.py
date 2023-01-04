@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=xjnu-sa(i@)85dli0#7@bb$s$=jtlserb5#3&0d4rer!2inv#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# use '127.0.0.1' if DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -75,10 +76,22 @@ WSGI_APPLICATION = 'budget.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'budget_django',
+        'USER': 'postgres',
+        'PASSWORD': '1111',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

@@ -1,9 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
+from .models import *
 
 
-def expenses_view(request):
-    return HttpResponse("expenses")
+menu = ['About', 'Add expenses', 'Add currency', 'Add section']
+
+
+def index_view(request):
+    members = FamilyMember.objects.all()
+    return render(request, 'expenses/index.html', {'menu': menu, 'title': 'Main page', 'members': members})
+
+
+def about_view(request):
+    return render(request, 'expenses/about.html', {'menu': menu, 'title': 'About'})
 
 
 def sections_view(request):
@@ -15,8 +24,8 @@ def currencies_view(request):
 
 
 def archive_view(request, year):
-    if int(year) > 2022:
-        # redirect to main page if no year
+    if int(year) > 2022 or int(year) < 2020:
+        # redirect to the main page if no year
         return redirect('expenses_view', permanent=True)
     return HttpResponse(f"archive {year}")
 

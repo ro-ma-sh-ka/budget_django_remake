@@ -1,0 +1,15 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<ul>
+    {% for member in members %}
+        <li>
+            {{ member.member }}<br>
+            {{ member.email }}<br>
+            {{ member.password }}<br>
+            {{ member.created_at }}<br>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

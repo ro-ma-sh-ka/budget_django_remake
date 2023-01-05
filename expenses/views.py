@@ -3,16 +3,26 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import *
 
 
-menu = ['About', 'Add expenses', 'Add currency', 'Add section']
+menu = [{'title': 'About', 'url': 'about_view'},
+        {'title': 'Expenses', 'url': 'expenses_view'},
+        {'title': 'Sections', 'url': 'sections_view'},
+        {'title': 'Currencies', 'url': 'currencies_view'},
+        # {'title': 'Archive', 'url': 'archive_view'},
+        {'title': 'Login', 'url': 'login_view'},
+]
 
 
 def index_view(request):
     members = FamilyMember.objects.all()
-    return render(request, 'expenses/index.html', {'menu': menu, 'title': 'Main page', 'members': members})
+    return render(request, 'expenses/index.html', {'menu': menu, 'members': members})
 
 
 def about_view(request):
-    return render(request, 'expenses/about.html', {'menu': menu, 'title': 'About'})
+    return render(request, 'expenses/about.html', {'menu': menu})
+
+
+def expenses_view(request):
+    return HttpResponse("Expenses")
 
 
 def sections_view(request):
@@ -21,6 +31,10 @@ def sections_view(request):
 
 def currencies_view(request):
     return HttpResponse("Currencies")
+
+
+def login_view(request):
+    return HttpResponse("Login")
 
 
 def archive_view(request, year):

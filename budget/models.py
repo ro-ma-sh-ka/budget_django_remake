@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class FamilyMember(models.Model):
@@ -8,7 +9,11 @@ class FamilyMember(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.member
+        return str(self.pk)
+
+    # use this function to create absolute urls to manage our users
+    def get_absolute_url(self):
+        return reverse('user', kwargs={'user_id': self.pk})
 
 
 class Currency(models.Model):
@@ -22,6 +27,10 @@ class Currency(models.Model):
     def __str__(self):
         return self.currency
 
+    # use this function to create absolute urls to manage our currencies
+    def get_absolute_url(self):
+        return reverse('currency', kwargs={'currency_id': self.pk})
+
 
 class Section(models.Model):
     section = models.CharField(max_length=30)
@@ -32,6 +41,10 @@ class Section(models.Model):
 
     def __str__(self):
         return self.section
+
+    # use this function to create absolute urls to manage our sections
+    def get_absolute_url(self):
+        return reverse('section', kwargs={'section_id': self.pk})
 
 
 class Budget(models.Model):
@@ -45,3 +58,7 @@ class Budget(models.Model):
     what_is = models.TextField(max_length=200)
     section_id = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='+')
     public = models.BooleanField(default=True)
+
+    # use this function to create absolute urls to manage our budget
+    def get_absolute_url(self):
+        return reverse('expense', kwargs={'expense_id': self.pk})

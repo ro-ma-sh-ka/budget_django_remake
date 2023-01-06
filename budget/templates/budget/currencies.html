@@ -1,0 +1,12 @@
+{% extends 'budget/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<ul>
+{% for currency in currencies %}
+    <li>{{ currency.currency }}</li>
+    <li>{{ currency.country }}</li>
+{% endfor%}
+</ul>
+<a href="{% url 'add_currency_view' %}">add new currency (test)</a>
+{% endblock content%}

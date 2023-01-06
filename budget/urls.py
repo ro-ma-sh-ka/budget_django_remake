@@ -1,25 +1,17 @@
-"""budget URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path, include
-from expenses.views import *
+from django.urls import path, re_path
+from .views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('expenses.urls')),
+    path('', index_view, name='index_view'),
+    path('about/', about_view, name='about_view'),
+    path('budget/', budget_view, name='budget_view'),
+    path('sections/', sections_view, name='sections_view'),
+    path('currencies/', currencies_view, name='currencies_view'),
+    # path('expense/<int:expense_id>', edit_expense_view, name='edit_expense_view'),
+    # path('section/<int:section_id>', edit_section_view, name='edit_section_view'),
+    path('currency/<int:currency_id>', edit_currency_view, name='edit_currency_view'),
+    path('currency_added', add_currency_view, name='add_currency_view'),
+    path('archive/', archive_view, name='archive_view'),
+    # re_path(r'archive/(?P<year>[0-9]{4})/', archive_view, name='archive_view'),
+    path('login/', login_view, name='login_view'),
 ]
-
-handler404 = page_not_found_view

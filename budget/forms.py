@@ -2,6 +2,12 @@ from django import forms
 from .models import *
 
 
+class CurrencyForm(forms.ModelForm):
+    class Meta:
+        model = Currency
+        fields = '__all__'
+
+
 class AddNewCurrency(forms.Form):
     currency = forms.CharField(max_length=20, label='Currency:')
     country = forms.CharField(max_length=20, label='Country:')

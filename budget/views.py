@@ -44,33 +44,7 @@ def currencies_view(request):
         raise Exception
 
 
-def edit_currency_view(request, currency_id):
-    try:
-        currency = Currency.objects.filter(pk=currency_id)
-        edited_currency = currency[0].currency
-        return HttpResponse(f"Currency {edited_currency} successfully updated.")
-    except:
-        raise Exception
-
-
-def delete_currency_view(request, currency_id):
-    try:
-        currency = Currency.objects.filter(pk=currency_id)
-        deleted_currency = currency[0].currency
-        currency.delete()
-        return HttpResponse(f"Currency {deleted_currency} successfully deleted.")
-    except:
-        raise Exception
-
-
 def add_currency_view(request):
-    # try:
-    #     new_currency = Currency(currency='GEL',
-    #                             country='Georgia',
-    #                             creator_id_id=2,
-    #                             editor_id_id=2
-    #                             )
-    #     new_currency.save()
     if request.method == 'POST':
         form = AddNewCurrency(request.POST)
         if form.is_valid():
@@ -86,6 +60,44 @@ def add_currency_view(request):
                'message': 'add new currency',
                'title': 'add new currency'}
     return render(request, 'budget/new_currency.html', context=context)
+
+
+def edit_currency_view(request, currency_id):
+    try:
+        currency = Currency.objects.filter(pk=currency_id)
+    except:
+        raise Exception
+    data = {
+        'currency': currency[0].currency,
+        'country': currency[0].country
+    }
+
+    if request.method == 'POST':
+        form = CurrencyForm(request.POST)
+        if form.is_valid():
+            try:
+                Currency.objects.filter(pk=currency_id).update(**form.cleaned_data)
+                return redirect('currencies_view')
+            except:
+                form.add_error(None, 'New currency has not edited.')
+    else:
+        form = CurrencyForm(data)
+        context = {'form': form,
+                   'currency_id': currency_id,
+                   'menu': menu,
+                   'message': 'edit currency',
+                   'title': 'edit currency'}
+        return render(request, 'budget/edit_currency.html', context=context)
+
+
+def delete_currency_view(request, currency_id):
+    try:
+        currency = Currency.objects.filter(pk=currency_id)
+        deleted_currency = currency[0].currency
+        currency.delete()
+        return HttpResponse(f"Currency {deleted_currency} successfully deleted.")
+    except:
+        raise Exception
 
 
 def login_view(request):

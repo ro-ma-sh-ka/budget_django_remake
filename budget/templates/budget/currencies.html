@@ -4,8 +4,9 @@
 <h1>{{ title }}</h1>
 <ul>
 {% for currency in currencies %}
-    <li>{{ currency.currency }}</li>
-    <li>{{ currency.country }}</li>
+    <li>{{ currency.currency }} | {{ currency.country }} |
+    <a href="{{ currency.edit_currency }}">edit</a> | <a href="{{ currency.delete_currency }}">delete</a>
+    </li>
 {% endfor%}
 </ul>
 <a href="{% url 'add_currency_view' %}">add new currency (test)</a>

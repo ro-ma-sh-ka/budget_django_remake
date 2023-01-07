@@ -28,8 +28,11 @@ class Currency(models.Model):
         return self.currency
 
     # use this function to create absolute urls to manage our currencies
-    def get_absolute_url(self):
-        return reverse('currency', kwargs={'currency_id': self.pk})
+    def edit_currency(self):
+        return reverse('edit_currency_view', kwargs={'currency_id': self.pk})
+
+    def delete_currency(self):
+        return reverse('delete_currency_view', kwargs={'currency_id': self.pk})
 
 
 class Section(models.Model):

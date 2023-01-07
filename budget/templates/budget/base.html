@@ -8,14 +8,36 @@
     <!--<link type="text/css" href="{% static 'budget/css/styles.css' %}" rel="stylesheet">-->
 </head>
 <body>
+
   {% block mainmenu %}
-    <ul>
+    <style>
+        ul.main_menu {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333333;
+        }
+
+        ul.main_menu li {
+          float: left;
+        }
+
+        ul.main_menu li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 16px;
+          text-decoration: none;
+        }
+
+        ul.main_menu li a:hover {
+          background-color: #111111;
+        }
+    </style>
+    <ul class="main_menu">
     {% for param in menu %}
-        {% if not forloop.last %}
-            <li><a href="{% url param.url %}">{{ param.title }}</a></li>
-        {% else %}
-            <li><a href="{% url param.url %}">{{ param.title }}</a></li>
-        {% endif %}
+        <li><a href="{% url param.url %}">{{ param.title }}</a></li>
     {% endfor %}
     </ul>
   {% endblock mainmenu %}

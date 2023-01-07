@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import *
+from .forms import *
 
 menu = [{'title': 'About', 'url': 'about_view'},
         {'title': 'Budget', 'url': 'budget_view'},
@@ -63,17 +64,28 @@ def delete_currency_view(request, currency_id):
 
 
 def add_currency_view(request):
-    try:
-        new_currency = Currency(currency='GEL',
-                                country='Georgia',
-                                creator_id_id=2,
-                                editor_id_id=2
-                                )
-        new_currency.save()
-        context = {'message': f'New currency {new_currency.currency} successfully added'}
-        return render(request, 'budget/success.html', context=context)
-    except:
-        raise Exception
+    # try:
+    #     new_currency = Currency(currency='GEL',
+    #                             country='Georgia',
+    #                             creator_id_id=2,
+    #                             editor_id_id=2
+    #                             )
+    #     new_currency.save()
+    if request.method == 'POST':
+        form = AddNewCurrency(request.POST)
+        if form.is_valid():
+            try:
+                Currency.objects.create(**form.cleaned_data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'New currency has not added.')
+    else:
+        form = AddNewCurrency()
+    context = {'form': form,
+               'menu': menu,
+               'message': 'add new currency',
+               'title': 'add new currency'}
+    return render(request, 'budget/new_currency.html', context=context)
 
 
 def login_view(request):

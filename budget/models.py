@@ -17,8 +17,8 @@ class FamilyMember(models.Model):
 
 
 class Currency(models.Model):
-    currency = models.CharField(max_length=20)
-    country = models.CharField(max_length=20)
+    currency = models.CharField(max_length=20, unique=True, verbose_name='Currency:')
+    country = models.CharField(max_length=20, unique=True, verbose_name='Country:')
     creator_id = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, related_name='+')
     created_at = models.DateTimeField(auto_now_add=True)
     editor_id = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, related_name='+')

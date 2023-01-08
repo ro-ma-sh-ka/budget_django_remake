@@ -27,7 +27,10 @@ class Currency(models.Model):
     def __str__(self):
         return self.currency
 
-    # use this function to create absolute urls to manage our currencies
+    # use this functions to create absolute urls to manage our currencies
+    # def get_absolute_url(self):
+    #     return reverse('add_currency_view', kwargs={'currency_id': self.pk})
+
     def edit_currency(self):
         return reverse('edit_currency_view', kwargs={'currency_id': self.pk})
 

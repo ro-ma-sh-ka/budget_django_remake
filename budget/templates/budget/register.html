@@ -1,0 +1,16 @@
+{% extends 'budget/base.html' %}
+{% block content %}
+<h2>{{ title }}</h2>
+
+<!-- without action to use the same form if something wrong-->
+<form method="post">
+    {% csrf_token %}
+
+    {% for f in form %}
+        <p>{{ f.label }}: {{ f }}</p>
+        <p>{{ f.errors }}</p>
+    {% endfor %}
+    <button type="submit">Register</button>
+</form>
+
+{% endblock content %}

@@ -7,12 +7,15 @@ menu = [
         {'title': 'Budget', 'url': 'budget_view'},
         {'title': 'Sections', 'url': 'sections_view'},
         {'title': 'Currencies', 'url': 'currencies_view'},
-        {'title': 'Archive', 'url': 'archive_view'}
 ]
 
 
 class DataMixin:
     def get_user_context(self, **kwargs):
         context = kwargs
-        context['menu'] = menu
+        user_menu = menu.copy()
+        # correct menu if user is not authenticated
+        if not self.request.user.is_authenticated:
+            user_menu.pop(1)
+        context['menu'] = user_menu
         return context

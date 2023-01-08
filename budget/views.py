@@ -1,8 +1,12 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 # from django.contrib.auth.decorators import login_required
 
 from .models import *
@@ -142,16 +146,48 @@ def delete_currency_view(request, currency_id):
         raise Exception
 
 
-def login_view(request):
-    return HttpResponse("Login")
+def logout_user_view(request):
+    logout(request)
+    return redirect('login')
 
 
-def register_view(request):
-    return HttpResponse("Register")
+class LoginUser(DataMixin, LoginView):
+    form_class = AuthenticationForm
+    template_name = 'budget/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Authorization')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('home')
 
 
-def archive_view(request):
-    return HttpResponse(f"archive")
+class RegisterUser(DataMixin, CreateView):
+    form_class = RegisterUserForm
+    template_name = 'budget/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Registration')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+    # automatic redirect authorized user to the main page
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
 
 
 def page_not_found_view(request, exception):

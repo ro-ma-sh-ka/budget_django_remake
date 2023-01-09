@@ -32,10 +32,10 @@ class Currency(models.Model):
     #     return reverse('add_currency_view', kwargs={'currency_id': self.pk})
 
     def edit_currency(self):
-        return reverse('edit_currency_view', kwargs={'currency_id': self.pk})
+        return reverse('edit_currency', kwargs={'currency_id': self.pk})
 
     def delete_currency(self):
-        return reverse('delete_currency_view', kwargs={'currency_id': self.pk})
+        return reverse('delete_currency', kwargs={'currency_id': self.pk})
 
 
 class Section(models.Model):
@@ -48,9 +48,15 @@ class Section(models.Model):
     def __str__(self):
         return self.section
 
+    def edit_section(self):
+        return reverse('edit_section', kwargs={'section_id': self.pk})
+
+    def delete_section(self):
+        return reverse('delete_section', kwargs={'section_id': self.pk})
+
     # use this function to create absolute urls to manage our sections
-    def get_absolute_url(self):
-        return reverse('section', kwargs={'section_id': self.pk})
+    # def get_absolute_url(self, method):
+    #     return reverse(method, kwargs={'section_id': self.pk})
 
 
 class Budget(models.Model):

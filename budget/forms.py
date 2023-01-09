@@ -5,7 +5,6 @@ from .models import *
 
 
 class CurrencyForm(forms.ModelForm):
-
     # run this constructor when we create a class instance
     def __init__(self, *args, **kwargs):
 
@@ -18,6 +17,7 @@ class CurrencyForm(forms.ModelForm):
         self.fields['editor_id'].label = 'Editor:'
         self.fields['editor_id'].empty_label = 2
 
+    # connect form with table and set fields which we show
     class Meta:
         model = Currency
         fields = ['currency', 'country', 'creator_id', 'editor_id']
@@ -27,6 +27,20 @@ class CurrencyForm(forms.ModelForm):
         #     'creator_id': forms.ModelChoiceField(queryset=FamilyMember.objects.all(), label='Creator:'),
         #     'editor_id': forms.ModelChoiceField(queryset=FamilyMember.objects.all(), label='Editor:')
         # }
+
+
+class SectionForm(forms.ModelForm):
+    def __init__(self,  *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['creator_id'].label = 'Creator'
+        self.fields['creator_id'].empty_label = 2
+        self.fields['editor_id'].label = 'Editor'
+        self.fields['editor_id'].empty_label = 2
+
+    # connect form with table and set fields which we show
+    class Meta:
+        model = Section
+        fields = ['section', 'creator_id', 'editor_id']
 
 
 class RegisterUserForm(UserCreationForm):

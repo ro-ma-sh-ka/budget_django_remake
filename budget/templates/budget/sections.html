@@ -1,1 +1,16 @@
 {% extends 'budget/base.html' %}
+
+{% block content %}
+<title>{{ title }}</title>
+<h2>{{ title }}</h2>
+<ul>
+    {% for section in sections%}
+        <li>
+            {{ section.section }}|
+            <a href="{{ section.edit_section }}">edit</a>|
+            <a href="{{ section.delete_section }}">delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'add_section' %}">add new section</a>
+{% endblock content %}

@@ -5,10 +5,12 @@
 <h1>{{ title }}</h1>
 <ul>
 {% for currency in currencies %}
-    <li>{{ currency.currency }} | {{ currency.country }} |
-    <a href="{{ currency.edit_currency }}">edit</a> | <a href="{{ currency.delete_currency }}">delete</a>
+    <li>
+        {{ currency.currency }} | {{ currency.country }}|
+        <a href="{{ currency.edit_currency }}">edit</a>|
+        <a href="{{ currency.delete_currency }}">delete</a>
     </li>
 {% endfor%}
 </ul>
-<a href="{% url 'add_currency_view' %}">add new currency</a>
+<a href="{% url 'add_currency' %}">add new currency</a>
 {% endblock content%}

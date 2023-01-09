@@ -31,16 +31,90 @@ def budget_view(request):
     return HttpResponse("Expenses")
 
 
-def sections_view(request):
-    return HttpResponse("Sections")
+class AddSection(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = SectionForm
+    template_name = 'budget/new_section.html'
+
+    # redirect after we add new section
+    success_url = reverse_lazy('sections')
+
+    # redirect to login page thanks to LoginRequiredMixin
+    login_url = reverse_lazy('sections')
+
+    # method to send to our template dynamic and/or static content
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Add new section')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+
+def edit_section_view(request, section_id):
+    try:
+        section = Section.objects.filter(pk=section_id)
+    except:
+        raise Exception
+    data = {
+        'section': section[0].section,
+    }
+
+    if request.method == 'POST':
+        form = SectionForm(request.POST)
+        if form.is_valid():
+            try:
+                Section.objects.filter(pk=section_id).update(**form.cleaned_data)
+                return redirect('sections')
+            except:
+                form.add_error(None, 'New section has not edited.')
+    else:
+        form = SectionForm(data)
+        context = {'form': form,
+                   'section_id': section_id,
+                   'menu': menu,
+                   'message': 'edit section',
+                   'title': 'edit section'}
+        return render(request, 'budget/edit_section.html', context=context)
+
+
+def delete_section_view(request, section_id):
+    try:
+        section = Section.objects.filter(pk=section_id)
+        section.delete()
+        return redirect('sections')
+    except:
+        raise Exception
+
+
+# CBV - Class Based Views
+class SectionsView(DataMixin, ListView):
+    model = Section
+    template_name = 'budget/sections.html'
+    context_object_name = 'sections'
+
+    # method to send to our template dynamic and/or static content
+    def get_context_data(self, *, object_list=None, **kwargs):
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Sections')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+    # by default ListView takes all data from database, but we can use this method to filter from database
+    def get_queryset(self):
+        return Section.objects.all()
 
 
 # CBV - Class Based Views
 class CurrenciesView(DataMixin, ListView):
     model = Currency
-    # this class uses template <app_name>/<model_name>_list.html but we set our template
+    # by default this class uses template <app_name>/<model_name>_list.html, but we set our template
     template_name = 'budget/currencies.html'
-    # this class uses variable object_list but we set name of variable which we send to template
+    # by default this class uses variable object_list, but we set name of variable which we send to template
     context_object_name = 'currencies'
 
     # method to send to our template dynamic and/or static content
@@ -51,11 +125,9 @@ class CurrenciesView(DataMixin, ListView):
         # use this method to send data to mixin
         c_def = self.get_user_context(title='Currencies')
         context = dict(list(context.items()) + list(c_def.items()))
-        # context['menu'] = menu
-        # context['title'] = 'Currencies'
         return context
 
-    # use this method to filter from database
+    # by default ListView takes all data from database, but we can use this method to filter from database
     def get_queryset(self):
         return Currency.objects.all()
 
@@ -77,10 +149,10 @@ class AddCurrency(LoginRequiredMixin, DataMixin, CreateView):
     template_name = 'budget/new_currency.html'
 
     # redirect after we add new currency
-    success_url = reverse_lazy('currencies_view')
+    success_url = reverse_lazy('currencies')
 
     # redirect to login page thanks to LoginRequiredMixin
-    login_url = reverse_lazy('currencies_view')
+    login_url = reverse_lazy('currencies')
 
     # method to send to our template dynamic and/or static content
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -124,7 +196,7 @@ def edit_currency_view(request, currency_id):
         if form.is_valid():
             try:
                 Currency.objects.filter(pk=currency_id).update(**form.cleaned_data)
-                return redirect('currencies_view')
+                return redirect('currencies')
             except:
                 form.add_error(None, 'New currency has not edited.')
     else:
@@ -141,7 +213,7 @@ def delete_currency_view(request, currency_id):
     try:
         currency = Currency.objects.filter(pk=currency_id)
         currency.delete()
-        return redirect('currencies_view')
+        return redirect('currencies')
     except:
         raise Exception
 

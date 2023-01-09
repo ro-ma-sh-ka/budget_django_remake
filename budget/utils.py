@@ -3,10 +3,10 @@ from .models import *
 
 
 menu = [
-        {'title': 'About', 'url': 'about_view'},
-        {'title': 'Budget', 'url': 'budget_view'},
-        {'title': 'Sections', 'url': 'sections_view'},
-        {'title': 'Currencies', 'url': 'currencies_view'},
+        {'title': 'About', 'url': 'about'},
+        {'title': 'Budget', 'url': 'budget'},
+        {'title': 'Sections', 'url': 'sections'},
+        {'title': 'Currencies', 'url': 'currencies'},
 ]
 
 

@@ -40,7 +40,7 @@
         <li><a href="{% url param.url %}">{{ param.title }}</a></li>
     {% endfor %}
         {% if request.user.is_authenticated %}
-            <li>{{ user.username }}<a href="{% url 'logout' %}">Log out</a>
+            <li>{{ user.username }} {{ user.id }}<a href="{% url 'logout' %}">Log out</a>
         {% else %}
             <li><a href="{% url 'login' %}">Sign in</a>|<a href="{% url 'register' %}">Register</a></li>
         {% endif %}

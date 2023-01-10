@@ -13,9 +13,7 @@ class CurrencyForm(forms.ModelForm):
 
         # after we run super constructor we have properties for class instances
         self.fields['creator_id'].label = 'Creator:'
-        self.fields['creator_id'].empty_label = 2
         self.fields['editor_id'].label = 'Editor:'
-        self.fields['editor_id'].empty_label = 2
 
     # connect form with table and set fields which we show
     class Meta:
@@ -32,10 +30,6 @@ class CurrencyForm(forms.ModelForm):
 class SectionForm(forms.ModelForm):
     def __init__(self,  *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['creator_id'].label = 'Creator'
-        self.fields['creator_id'].empty_label = 2
-        self.fields['editor_id'].label = 'Editor'
-        self.fields['editor_id'].empty_label = 2
 
     # connect form with table and set fields which we show
     class Meta:

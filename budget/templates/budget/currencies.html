@@ -6,11 +6,17 @@
 <ul>
 {% for currency in currencies %}
     <li>
-        {{ currency.currency }} | {{ currency.country }}|
-        <a href="{{ currency.edit_currency }}">edit</a>|
-        <a href="{{ currency.delete_currency }}">delete</a>
+        {{ currency.currency }} | {{ currency.country }}
+        {% if request.user.is_authenticated %}
+            |<a href="{{ currency.edit_currency }}">edit</a>|
+            <a href="{{ currency.delete_currency }}">delete</a>
+        {% endif %}
     </li>
 {% endfor%}
 </ul>
-<a href="{% url 'add_currency' %}">add new currency</a>
+
+{% if request.user.is_authenticated %}
+    <a href="{% url 'add_currency' %}">add new currency</a>
+{% endif %}
+
 {% endblock content%}

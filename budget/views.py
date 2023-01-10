@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import *
@@ -53,6 +53,7 @@ class AddSection(LoginRequiredMixin, DataMixin, CreateView):
         return context
 
 
+@login_required(login_url='login')
 def edit_section_view(request, section_id):
     try:
         section = Section.objects.filter(pk=section_id)
@@ -74,12 +75,14 @@ def edit_section_view(request, section_id):
         form = SectionForm(data)
         context = {'form': form,
                    'section_id': section_id,
+                   'creator_id': request.user.id,
                    'menu': menu,
                    'message': 'edit section',
                    'title': 'edit section'}
         return render(request, 'budget/edit_section.html', context=context)
 
 
+@login_required(login_url='login')
 def delete_section_view(request, section_id):
     try:
         section = Section.objects.filter(pk=section_id)
@@ -181,6 +184,7 @@ class AddCurrency(LoginRequiredMixin, DataMixin, CreateView):
 #     return render(request, 'budget/new_currency.html', context=context)
 
 
+@login_required(login_url='login')
 def edit_currency_view(request, currency_id):
     try:
         currency = Currency.objects.filter(pk=currency_id)
@@ -209,6 +213,7 @@ def edit_currency_view(request, currency_id):
         return render(request, 'budget/edit_currency.html', context=context)
 
 
+@login_required(login_url='login')
 def delete_currency_view(request, currency_id):
     try:
         currency = Currency.objects.filter(pk=currency_id)

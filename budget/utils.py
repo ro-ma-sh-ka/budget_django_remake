@@ -7,6 +7,7 @@ menu = [
         {'title': 'Budget', 'url': 'budget'},
         {'title': 'Sections', 'url': 'sections'},
         {'title': 'Currencies', 'url': 'currencies'},
+        {'title': 'Load expenses', 'url': ''}
 ]
 
 
@@ -17,5 +18,7 @@ class DataMixin:
         # correct menu if user is not authenticated
         if not self.request.user.is_authenticated:
             user_menu.pop(1)
+        else:
+            context['user_id'] = self.request.user.id
         context['menu'] = user_menu
         return context

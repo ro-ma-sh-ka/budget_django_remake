@@ -7,7 +7,7 @@ menu = [
         {'title': 'Budget', 'url': 'budget'},
         {'title': 'Sections', 'url': 'sections'},
         {'title': 'Currencies', 'url': 'currencies'},
-        {'title': 'Load expenses', 'url': ''}
+        # {'title': 'Load expenses', 'url': ''}
 ]
 
 

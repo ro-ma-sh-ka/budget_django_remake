@@ -37,6 +37,15 @@ class SectionForm(forms.ModelForm):
         fields = ['section', 'creator_id', 'editor_id']
 
 
+class ExpenseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Budget
+        fields = ['what_is', 'total']
+
+
 class RegisterUserForm(UserCreationForm):
     class Meta:
         username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-input'}))

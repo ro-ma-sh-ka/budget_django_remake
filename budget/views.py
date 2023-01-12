@@ -27,8 +27,86 @@ def about_view(request):
     return render(request, 'budget/about.html', {'menu': menu})
 
 
-def budget_view(request):
-    return HttpResponse("Expenses")
+@login_required(login_url='login')
+def edit_expense_view(request, expense_id):
+    try:
+        expense = Section.objects.filter(pk=expense_id)
+    except:
+        raise Exception
+    data = {
+        'what_is': expense[0].what_is,
+        'total': expense[0].total,
+    }
+
+    if request.method == 'POST':
+        form = SectionForm(request.POST)
+        if form.is_valid():
+            try:
+                Budget.objects.filter(pk=expense_id).update(**form.cleaned_data)
+                return redirect('expenses')
+            except:
+                form.add_error(None, 'New expense has not edited.')
+    else:
+        form = ExpenseForm(data)
+        context = {'form': form,
+                   'editor_id': request.user.id,
+                   'menu': menu,
+                   'message': 'edit expense',
+                   'title': 'edit expense'}
+        return render(request, 'budget/edit_expense.html', context=context)
+
+
+@login_required(login_url='login')
+def delete_expense_view(request, expense_id):
+    try:
+        expense = Budget.objects.filter(pk=expense_id)
+        expense.delete()
+        return redirect('expenses')
+    except:
+        raise Exception
+
+
+class ExpensesView(DataMixin, ListView):
+    model = Budget
+    # by default this class uses template <app_name>/<model_name>_list.html, but we set our template
+    template_name = 'budget/expenses.html'
+    # by default this class uses variable object_list, but we set name of variable which we send to template
+    context_object_name = 'expenses'
+
+    # method to send to our template dynamic and/or static content
+    def get_context_data(self, *, object_list=None, **kwargs):
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Expenses')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+    # by default ListView takes all data from database, but we can use this method to filter from database
+    def get_queryset(self):
+        return Budget.objects.all()
+
+
+class AddExpense(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = ExpenseForm
+    template_name = 'budget/new_expense.html'
+
+    # redirect after we add new section
+    success_url = reverse_lazy('home')
+
+    # redirect to login page thanks to LoginRequiredMixin
+    login_url = reverse_lazy('home')
+
+    # method to send to our template dynamic and/or static content
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        # catch context - all named parameters which already exist such as: template_name, context_object_name
+        context = super().get_context_data(**kwargs)
+
+        # use this method to send data to mixin
+        c_def = self.get_user_context(title='Add new expense')
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
 
 
 class AddSection(LoginRequiredMixin, DataMixin, CreateView):
@@ -95,7 +173,9 @@ def delete_section_view(request, section_id):
 # CBV - Class Based Views
 class SectionsView(DataMixin, ListView):
     model = Section
+    # by default this class uses template <app_name>/<model_name>_list.html, but we set our template
     template_name = 'budget/sections.html'
+    # by default this class uses variable object_list, but we set name of variable which we send to template
     context_object_name = 'sections'
 
     # method to send to our template dynamic and/or static content
@@ -133,18 +213,6 @@ class CurrenciesView(DataMixin, ListView):
     # by default ListView takes all data from database, but we can use this method to filter from database
     def get_queryset(self):
         return Currency.objects.all()
-
-
-# def currencies_view(request):
-#     try:
-#         currencies = Currency.objects.all()
-#         context = {'menu': menu,
-#                    'title': 'Currencies',
-#                    'currencies': currencies
-#                    }
-#         return render(request, 'budget/currencies.html', context=context)
-#     except:
-#         raise Exception
 
 
 class AddCurrency(LoginRequiredMixin, DataMixin, CreateView):

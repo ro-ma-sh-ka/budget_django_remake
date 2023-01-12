@@ -4,7 +4,7 @@ from .models import *
 
 menu = [
         {'title': 'About', 'url': 'about'},
-        {'title': 'Budget', 'url': 'budget'},
+        {'title': 'Expenses', 'url': 'expenses'},
         {'title': 'Sections', 'url': 'sections'},
         {'title': 'Currencies', 'url': 'currencies'},
         # {'title': 'Load expenses', 'url': ''}

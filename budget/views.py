@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
@@ -39,7 +41,7 @@ def edit_expense_view(request, expense_id):
     }
 
     if request.method == 'POST':
-        form = SectionForm(request.POST)
+        form = ExpenseForm(request.POST)
         if form.is_valid():
             try:
                 Budget.objects.filter(pk=expense_id).update(**form.cleaned_data)
@@ -84,13 +86,13 @@ class ExpensesView(DataMixin, ListView):
 
     # by default ListView takes all data from database, but we can use this method to filter from database
     def get_queryset(self):
-        return Budget.objects.all()
+        return Budget.objects.filter(date__gte=datetime.datetime(2023, 1, 1))
 
 
 class AddExpense(LoginRequiredMixin, DataMixin, CreateView):
     form_class = ExpenseForm
     template_name = 'budget/new_expense.html'
-
+    # fields = []
     # redirect after we add new section
     success_url = reverse_lazy('home')
 
@@ -217,13 +219,21 @@ class CurrenciesView(DataMixin, ListView):
 
 class AddCurrency(LoginRequiredMixin, DataMixin, CreateView):
     form_class = CurrencyForm
+    # model = Currency
     template_name = 'budget/new_currency.html'
 
+    # fields = ['currency', 'country']
     # redirect after we add new currency
     success_url = reverse_lazy('currencies')
 
     # redirect to login page thanks to LoginRequiredMixin
     login_url = reverse_lazy('currencies')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['creator_id'] = 2
+        initial['editor_id'] = 2
+        return initial
 
     # method to send to our template dynamic and/or static content
     def get_context_data(self, *, object_list=None, **kwargs):

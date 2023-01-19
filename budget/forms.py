@@ -12,13 +12,14 @@ class CurrencyForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # after we run super constructor we have properties for class instances
-        self.fields['creator_id'].label = 'Creator:'
-        self.fields['editor_id'].label = 'Editor:'
+        # self.fields['creator_id'].label = 'Creator:'
+        # self.fields['editor_id'].label = 'Editor:'
 
     # connect form with table and set fields which we show
     class Meta:
         model = Currency
         fields = ['currency', 'country', 'creator_id', 'editor_id']
+
         # widgets = {
         #     'currency': forms.CharField(max_length=20, label='Currency:'),
         #     'country': forms.CharField(max_length=20, label='Country:'),
@@ -43,7 +44,7 @@ class ExpenseForm(forms.ModelForm):
 
     class Meta:
         model = Budget
-        fields = ['what_is', 'total']
+        fields = '__all__'
 
 
 class RegisterUserForm(UserCreationForm):

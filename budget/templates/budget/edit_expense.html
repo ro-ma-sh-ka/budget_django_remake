@@ -1,16 +1,14 @@
 {% extends 'budget/base.html' %}
-
 {% block content %}
 <h1>{{ title }}</h1>
-<form action="{% url 'add_section' %}" method="post">
+<form action="{% url 'edit_expense' expense_id=expense_id %}" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
     <ul>
-    {% for f in form %}
-        <li>{{ f.label }}: {{ f }}</li>
-    {% endfor %}
+      {% for f in form %}
+          <li>{{ f.label }}: {{ f }}</li>
+      {% endfor %}
     </ul>
     <button type="submit">Send</button>
-<!--    <p>{{ user_id }}</p>-->
 </form>
 {% endblock content %}

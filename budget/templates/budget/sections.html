@@ -4,7 +4,7 @@
 <title>{{ title }}</title>
 <h2>{{ title }}</h2>
 <ul>
-    {% for section in sections%}
+    {% for section in sections %}
         <li>
             {{ section.section }}
             {% if request.user.is_authenticated %}

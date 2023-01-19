@@ -71,6 +71,6 @@ class Budget(models.Model):
     section_id = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='+')
     public = models.BooleanField(default=True)
 
-    # use this function to create absolute urls to manage our budget
+    # use this function to create absolute urls to reverse user to page
     def get_absolute_url(self):
         return reverse('expense', kwargs={'expense_id': self.pk})

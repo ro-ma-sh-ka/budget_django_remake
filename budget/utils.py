@@ -3,11 +3,12 @@ from .models import *
 
 
 menu = [
-        {'title': 'About', 'url': 'about'},
         {'title': 'Expenses', 'url': 'expenses'},
+        # {'title': 'Load expenses', 'url': ''},
+        # {'title': 'History', 'url': ''}
         {'title': 'Sections', 'url': 'sections'},
         {'title': 'Currencies', 'url': 'currencies'},
-        # {'title': 'Load expenses', 'url': ''}
+        {'title': 'About', 'url': 'about'},
 ]
 
 

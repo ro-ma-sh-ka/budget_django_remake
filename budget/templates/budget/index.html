@@ -1,16 +1,18 @@
 {% extends 'budget/base.html' %}
 
-{% block content %}
-<h1>{{ title }}</h1>
+<!--{% block sidecontent %}-->
+
+<!--{% endblock sidecontent %}-->
+
+{% block content%}
+<h2>{{ title_side }}</h2>
 <ul>
-    {% for member in members %}
+    {% for section in sections %}
         <li>
-            {{ member.pk }}<br>
-            {{ member.member }}<br>
-            {{ member.email }}<br>
-            {{ member.password }}<br>
-            {{ member.created_at }}<br>
+            {{ section.section }} - {{ section.total }}
+
         </li>
     {% endfor %}
+</ul>
 </ul>
 {% endblock content %}

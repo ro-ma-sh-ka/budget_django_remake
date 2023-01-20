@@ -17,10 +17,25 @@ from .utils import *
 
 
 def index_view(request):
-    members = FamilyMember.objects.all()
+    sections = Section.objects.all().values('section', 'pk')
+    today = datetime.datetime.now()
+    expenses = Budget.objects.filter(date__gte=datetime.datetime(
+        today.year,
+        today.month,
+        1)).values('section_id', 'total')
+
+    for i in range(0, len(sections)):
+        total = 0
+        for expense in expenses:
+            if expense['section_id'] == sections[i]['pk']:
+                total += expense['total']
+        sections[i]['total'] = total
+
     context = {'menu': menu,
-               'title': 'Expenses',
-               'members': members
+               'title_side': 'Sections',
+               'sections': sections,
+               'title_content': 'Expenses',
+               'expenses': expenses,
                }
     return render(request, 'budget/index.html', context=context)
 
@@ -87,7 +102,8 @@ class ExpensesView(DataMixin, ListView):
 
     # by default ListView takes all data from database, but we can use this method to filter from database
     def get_queryset(self):
-        return Budget.objects.filter(date__gte=datetime.datetime(2023, 1, 1))
+        today = datetime.datetime.now()
+        return Budget.objects.filter(date__gte=datetime.datetime(today.year, today.month, 1))
 
 
 class AddExpense(LoginRequiredMixin, DataMixin, CreateView):

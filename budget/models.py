@@ -74,3 +74,9 @@ class Budget(models.Model):
     # use this function to create absolute urls to reverse user to page
     def get_absolute_url(self):
         return reverse('expense', kwargs={'expense_id': self.pk})
+
+    def edit_expense(self):
+        return reverse('edit_expense', kwargs={'expense_id': self.pk})
+
+    def delete_expense(self):
+        return reverse('delete_expense', kwargs={'expense_id': self.pk})

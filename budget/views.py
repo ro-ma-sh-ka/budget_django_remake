@@ -32,7 +32,7 @@ def about_view(request):
 @login_required(login_url='login')
 def edit_expense_view(request, expense_id):
     try:
-        expense = Section.objects.filter(pk=expense_id)
+        expense = Budget.objects.filter(pk=expense_id)
     except:
         raise Exception
     data = {
@@ -54,7 +54,8 @@ def edit_expense_view(request, expense_id):
                    'editor_id': request.user.id,
                    'menu': menu,
                    'message': 'edit expense',
-                   'title': 'edit expense'}
+                   'title': 'edit expense',
+                   'expense_id': expense_id}
         return render(request, 'budget/edit_expense.html', context=context)
 
 

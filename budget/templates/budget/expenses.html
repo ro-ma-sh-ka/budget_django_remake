@@ -9,8 +9,8 @@
 <ul>
 {% for expense in expenses %}
     <li>
-        {{ expense.date }} | {{ expense.what_is }} - {{ expense.total }}
         {% if request.user.is_authenticated %}
+            {{ expense.date }} | {{ expense.what_is }} - {{ expense.total }}
             |<a href="{{ expense.edit_expense }}">edit</a>|
             <a href="{{ expense.delete_expense }}">delete</a>
         {% endif %}
